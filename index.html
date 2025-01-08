@@ -3,275 +3,234 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Agent - Giải Pháp Công Nghệ Thông Minh</title>
-    
-    <!-- FontAwesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
-    <!-- Animate CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-    
+    <title>ROBLOC AI Agent</title>
     <style>
-        /* Reset CSS và Biến Toàn Cục */
-        :root {
-            --primary-color: #3498db;
-            --secondary-color: #2ecc71;
-            --text-color: #333;
-            --bg-color: #ffffff;
-            --dark-bg-color: #121212;
-            --transition: all 0.3s ease;
-        }
-
-        /* Dark Mode Styles */
-        body.dark-mode {
-            background-color: var(--dark-bg-color);
-            color: #fff;
-        }
-
-        /* Responsive & Base Styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            transition: var(--transition);
-        }
-
         body {
             font-family: 'Arial', sans-serif;
-            line-height: 1.6;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-        }
-
-        /* Header & Navigation Styles */
-        header {
+            background: linear-gradient(135deg, #121212, #1e1e1e);
+            color: #ffffff;
             display: flex;
-            justify-content: space-between;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+        #avatar-container {
+            width: 300px;
+            display: flex;
+            flex-direction: column;
             align-items: center;
-            padding: 1rem 5%;
-            background-color: var(--primary-color);
-            color: white;
+            padding: 20px;
+            background-color: rgba(30, 30, 30, 0.9);
         }
-
-        nav ul {
-            display: flex;
-            list-style: none;
-        }
-
-        nav ul li {
-            margin: 0 15px;
-            position: relative;
-        }
-
-        nav ul li a {
-            color: white;
-            text-decoration: none;
-            transition: var(--transition);
-        }
-
-        /* Dropdown Menu Nâng Cao */
-        .dropdown {
-            position: relative;
-        }
-
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #f9f9f9;
-            min-width: 200px;
-            box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
-            z-index: 1;
-        }
-
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
-
-        /* Multi-Language Selector */
-        .language-selector {
-            display: flex;
-            align-items: center;
-        }
-
-        .language-selector select {
-            margin-left: 10px;
-            padding: 5px;
-        }
-
-        /* Dark Mode Toggle */
-        .dark-mode-toggle {
+        .avatar {
+            width: 80px;
+            height: 80px;
+            margin: 10px;
+            border: 2px solid transparent;
+            border-radius: 50%;
             cursor: pointer;
-            font-size: 24px;
+            object-fit: cover; /* Giữ tỷ lệ ảnh */
+            transition: border-color 0.3s;
+        }
+        .avatar:hover {
+            border-color: #007acc;
+        }
+        .selected {
+            border-color: #007acc;
+        }
+        #selected-avatar {
+            max-width: 100%;
+            max-height: 200px; /* Giới hạn chiều cao */
+            border-radius: 10px;
+            margin-bottom: 20px;
+            transition: transform 0.3s;
+        }
+        #chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: rgba(30, 30, 30, 0.9);
+            padding: 20px;
+        }
+        #chat-box {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            border: 1px solid #444;
+            border-radius: 10px;
+            background-color: #252526;
+            margin-bottom: 10px;
+        }
+        #input-container {
+            display: flex;
+        }
+        #user-input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #444;
+            border-radius: 8px;
+            font-size: 16px;
+            background-color: #333;
+            color: #ffffff;
+            transition: border-color 0.3s;
+        }
+        #user-input:focus {
+            border-color: #007acc;
+            outline: none;
+        }
+        #send-button {
+            padding: 12px 15px;
+            border: none;
+            background-color: #007acc;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            font-size: 16px;
+            margin-left: 10px;
+        }
+        #send-button:hover {
+            background-color: #005a9e;
+            transform: scale(1.05);
+        }
+        .message {
+            margin: 10px 0;
+            padding: 8px 12px;
+            border-radius: 10px;
+            max-width: 70%;
+            clear: both;
+            transition: background-color 0.3s;
+        }
+        .user-message {
+            background-color: #007acc;
+            color: #ffffff;
+            margin-left: auto;
+            text-align: right;
+        }
+        .bot-message {
+            background-color: #444;
+            color: #ffffff;
+            margin-right: auto;
+            text-align: left;
+        }
+        #auth-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        #email-input, #password-input {
+            padding: 10px;
+            margin: 5px;
+            border: 1px solid #444;
+            border-radius: 5px;
+            width: 80%;
+            max-width: 300px;
+            background-color: #333;
+            color: #fff;
+        }
+        #auth-button {
+            padding: 10px 15px;
+            border: none;
+            background-color: #007acc;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+        #auth-button:hover {
+            background-color: #005a9e;
         }
     </style>
 </head>
 <body>
-    <header>
-        <div class="logo">
-            <h1>AI Agent</h1>
+    <div id="avatar-container">
+        <img id="selected-avatar" src="" alt="Selected Avatar" style="display:none;">
+        <img src="https://img.upanh.tv/2025/01/08/8e98653faada33937d7a90b6434a8952.jpg" class="avatar" onclick="selectAvatar(this)">
+        <img src="https://img.upanh.tv/2025/01/08/327194216_108369902131721_3649147020063415428_n.jpg" class="avatar" onclick="selectAvatar(this)">
+        <img src="https://img.upanh.tv/2025/01/08/327774532_2113319588877398_3317745821828939319_n.jpg" class="avatar" onclick="selectAvatar(this)">
+        <img src="https://img.upanh.tv/2025/01/08/328715379_1831397447243004_2899238298077808247_n.jpg" class="avatar" onclick="selectAvatar(this)">
+        <img src="https://img.upanh.tv/2025/01/08/328933052_1291615428054631_7311347318087095915_n-1.jpg" class="avatar" onclick="selectAvatar(this)">
+        <img src="https://img.upanh.tv/2025/01/08/329258298_725772729078302_3916261246631329071_n.jpg" class="avatar" onclick="selectAvatar(this)">
+        <img src="https://img.upanh.tv/2025/01/08/329335076_873850553869803_2947030033857034245_n.jpg" class="avatar" onclick="selectAvatar(this)">
+        <img src="https://img.upanh.tv/2025/01/08/329364678_700251621784649_3437110574540905577_n.jpg" class="avatar" onclick="selectAvatar(this)">
+        <img src="https://img.upanh.tv/2025/01/08/329697970_2154569548081116_1766427353973674445_n.jpg" class="avatar" onclick="selectAvatar(this)">
+        <img src="https://img.upanh.tv/2025/01/08/329760238_895948491660450_6649622255640634620_n.jpg" class="avatar" onclick="selectAvatar(this)">
+        <img src="https://img.upanh.tv/2025/01/08/329930991_191091600196054_2423085782302673358_n.jpg" class="avatar" onclick="selectAvatar(this)">
+        <button id="confirm-avatar" style="margin-top: 10px; display: none;" onclick="confirmAvatar()">Chọn Avatar</button>
+    </div>
+    <div id="chat-container">
+        <div id="chat-box"></div>
+        <div id="input-container">
+            <input type="text" id="user-input" placeholder="Nhập câu hỏi của bạn..." />
+            <button id="send-button">Gửi</button>
         </div>
-        
-        <nav>
-            <ul>
-                <li><a href="#home">Trang Chủ</a></li>
-                <li class="dropdown">
-                    <a href="#services">Dịch Vụ</a>
-                    <div class="dropdown-content">
-                        <a href="#ai-solution">Giải Pháp AI</a>
-                        <a href="#consulting">Tư Vấn</a>
-                    </div>
-                </li>
-                <li><a href="#about">Về Chúng Tôi</a></li>
-                <li><a href="#contact">Liên Hệ</a></li>
-            </ul>
-        </nav>
+    </div>
+    <div id="auth-container">
+        <input type="email" id="email-input" placeholder="Email" />
+        <input type="password" id="password-input" placeholder="Mật khẩu" />
+        <button id="auth-button">Đăng Nhập</button>
+        <button id="register-button" style="margin-top: 10px;">Đăng Ký</button>
+    </div>
 
-        <div class="header-actions">
-            <div class="language-selector">
-                <select id="language-select">
-                    <option value="vi">🇻🇳 Tiếng Việt</option>
-                    <option value="en">🇬🇧 English</option>
-                </select>
-            </div>
-            
-            <div class="dark-mode-toggle" onclick="toggleDarkMode()">
-                <i class="fas fa-moon"></i>
-            </div>
-        </div>
-    </header>
-
-    <!-- Main Content -->
-    <main>
-        <!-- Hero Section với Parallax Effect -->
-        <section id="home" class="hero-section">
-            <div class="parallax-bg"></div>
-            <div class="hero-content">
-                <h2 class="animate__animated animate__fadeInUp">Giải Pháp AI Thông Minh</h2>
-                <p class="animate__animated animate__fadeInUp animate__delay-1s">
-                    Chúng tôi mang đến những giải pháp công nghệ tiên phong
-                </p>
-                <a href="#contact" class="cta-button animate__animated animate__pulse animate__infinite">
-                    Liên Hệ Ngay
-                </a>
-            </div>
-        </section>
-
-        <!-- Slider Sản Phẩm -->
-        <section id="products" class="product-slider">
-            <div class="slider-container">
-                <div class="slider-item active">
-                    <img src="placeholder-product1.jpg" alt="Sản phẩm AI 1">
-                    <div class="product-info">
-                        <h3>Giải Pháp AI Nhận Diện</h3>
-                        <p>Công nghệ nhận diện chuyên sâu</p>
-                    </div>
-                </div>
-                <!-- Thêm các slider item khác -->
-            </div>
-        </section>
-
-        <!-- Form Đăng Ký Động -->
-        <section id="registration" class="dynamic-form">
-            <div class="form-container">
-                <h2>Đăng Ký Nhận Tin</h2>
-                <form id="newsletter-form" onsubmit="return validateForm()">
-                    <div class="form-group">
-                        <label for="name">Họ Tên</label>
-                        <input type="text" id="name" name="name" required>
-                        <span class="error" id="name-error"></span>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" name="email" required>
-                        <span class="error" id="email-error"></span>
-                    </div>
-                    <div class="form-group">
-                        <label for="phone">Số Điện Thoại</label>
-                        <input type="tel" id="phone" name="phone" required>
-                        <span class="error" id="phone-error"></span>
-                    </div>
-                    <button type="submit" class="submit-btn">Đăng Ký</button>
-                </form>
-            </div>
-        </section>
-
-        <!-- Dashboard Demo -->
-        <section id="dashboard" class="dashboard-preview">
-            <h2>Dashboard Phân Tích</h2>
-            <div class="dashboard-grid">
-                <div class="dashboard-item">
-                    <h3>Thống Kê Truy Cập</h3>
-                    <div class="chart-placeholder">
-                        <!-- Placeholder cho biểu đồ -->
-                    </div>
-                </div>
-                <div class="dashboard-item">
-                    <h3>Hiệu Quả Hệ Thống</h3>
-                    <div class="chart-placeholder">
-                        <!-- Placeholder cho biểu đồ -->
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- Footer -->
-    <footer>
-        <div class="footer-content">
-            <div class="social-links">
-                <a href="#" class="social-icon"><i class="fab fa-facebook"></i></a>
-                <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
-                <a href="#" class="social-icon"><i class="fab fa-linkedin"></i></a>
-            </div>
-            <p>&copy; 2025 AI Agent. Bản Quyền Được Bảo Lưu.</p>
-        </div>
-    </footer>
-
-    <!-- JavaScript -->
     <script>
-        // Dark Mode Toggle
-        function toggleDarkMode() {
-            document.body.classList.toggle('dark-mode');
-            localStorage.setItem('dark-mode', document.body.classList.contains('dark-mode'));
+        let selectedAvatar = '';
+
+        function selectAvatar(avatar) {
+            const avatars = document.querySelectorAll('.avatar');
+            avatars.forEach(av => av.classList.remove('selected'));
+            avatar.classList.add('selected');
+            selectedAvatar = avatar.src; // Lưu avatar đã chọn
+
+            const selectedAvatarImg = document.getElementById('selected-avatar');
+            selectedAvatarImg.src = selectedAvatar;
+            selectedAvatarImg.style.display = 'block'; // Hiển thị ảnh đã chọn
+            document.getElementById('confirm-avatar').style.display = 'block'; // Hiển thị nút chọn avatar
         }
 
-        // Kiểm Tra Dark Mode Từ Local Storage
-        if(localStorage.getItem('dark-mode') === 'true') {
-            document.body.classList.add('dark-mode');
+        function confirmAvatar() {
+            alert(`Bạn đã chọn avatar: ${selectedAvatar}`);
+            // Thực hiện các hành động cần thiết để lưu avatar
         }
 
-        // Form Validation
-        function validateForm() {
-            let name = document.getElementById('name');
-            let email = document.getElementById('email');
-            let phone = document.getElementById('phone');
-            let valid = true;
+        const apiKey = 'YOUR_GEMINI_API_KEY'; // Thay thế YOUR_GEMINI_API_KEY bằng api key của bạn
+        const chatBox = document.getElementById('chat-box');
+        const userInput = document.getElementById('user-input');
+        const sendButton = document.getElementById('send-button');
 
-            // Validation logic
-            if(name.value.length < 2) {
-                document.getElementById('name-error').textContent = 'Tên không hợp lệ';
-                valid = false;
-            }
+        sendButton.addEventListener('click', () => {
+            const userMessage = userInput.value;
+            if (!userMessage) return;
 
-            if(!email.value.includes('@')) {
-                document.getElementById('email-error').textContent = 'Email không hợp lệ';
-                valid = false;
-            }
+            displayMessage(userMessage, 'user');
+            userInput.value = '';
 
-            if(phone.value.length < 10) {
-                document.getElementById('phone-error').textContent = 'Số điện thoại không hợp lệ';
-                valid = false;
-            }
-
-            return valid;
-        }
-
-        // Đa Ngôn Ngữ
-        document.getElementById('language-select').addEventListener('change', function() {
-            let language = this.value;
-            // Trong thực tế, bạn sẽ thêm logic chuyển đổi ngôn ngữ ở đây
-            alert('Chuyển ngôn ngữ: ' + language);
+            fetch('https://api.gemini.com/v1/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${apiKey}`
+                },
+                body: JSON.stringify({ message: userMessage })
+            })
+            .then(response => response.json())
+            .then(data => {
+                displayMessage(data.reply, 'bot');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                displayMessage('Có lỗi xảy ra. Vui lòng thử lại!', 'bot');
+            });
         });
+
+        function displayMessage(message, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}-message`;
+            messageDiv.textContent = message;
+            chatBox.appendChild(messageDiv);
+            chatBox.scrollTop = chatBox.scrollHeight; // tự động cuộn xuống
+        }
     </script>
 </body>
 </html>
